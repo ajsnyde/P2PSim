@@ -1,5 +1,6 @@
 package P2PSim;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,11 +16,13 @@ public class DataLoader {
 	static ConcurrentHashMap<Integer, TorrentInstance> torrentInstances = new ConcurrentHashMap<Integer, TorrentInstance>();
 	static ConcurrentHashMap<Integer, TorrentType> torrentTypes = new ConcurrentHashMap<Integer, TorrentType>();
 	
-	public static void loadAccess() {
-		Statement statement;
+	public static void loadAccess(File file) {
 		Connection dbCon = null;
 		try {
-			dbCon = DriverManager.getConnection("jdbc:ucanaccess://P2P.accdb");
+			if(file.getName() == "P2P.accdb")
+				dbCon = DriverManager.getConnection("jdbc:ucanaccess://P2P.accdb");
+			else if(file.exists())
+				dbCon = DriverManager.getConnection("jdbc:ucanaccess://" + file.getPath());
 			// Columns shown for reference
 			String addPeers = "SELECT ID, maxIn, maxOut, trafficIn, trafficOut FROM Peers";
 			String addTypes = "SELECT ID, numSections, sectionSize, torrentName FROM TorrentTypes";
@@ -32,7 +35,6 @@ public class DataLoader {
 			System.out.println("Connection Established");
 			
 			// PEERS
-			
 			preparedStatement = dbCon.prepareStatement(addPeers);
 			ResultSet peerRS = preparedStatement.executeQuery();
 			System.out.println("Loading Peers");

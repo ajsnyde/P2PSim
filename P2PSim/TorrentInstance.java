@@ -21,7 +21,6 @@ public class TorrentInstance {
 	}
 	
 	public String toString(){
-		return ID + " - " + sections.get(0);
-		//return Data.getType(TYPE).name + " - Type:" + TYPE + " - Peer:" + Data.getPeer(this).ID;
+		return Data.getType(TYPE).name + " - Type:" + TYPE + " - Peer:" + Data.getPeer(this).ID;
 	}
 }

@@ -40,15 +40,14 @@ public class Peer {
 			Peer peer = it.next();
 			if (peer.ID != ID && Helper.intersection(peer.connections, connections).isEmpty()) {
 				// checks for identical peer and lack of connections
-				System.out.println("Comparing peers " + ID + " and " + peer.ID);
-				peer.printFull();
+				//System.out.println("Comparing peers " + ID + " and " + peer.ID);
+				//peer.printFull();
 				List<Integer> torrentChoices = Helper.intersection(peer.torrentTypes,torrentTypes);
 				List<Integer> finalChoices = new ArrayList<Integer>();
-				System.out.println("Choices (Types) before checking sections "+torrentChoices);
 				for(int i: torrentChoices) {
 					if(Helper.intersection(Data.getInstance(peer.getInstance(i)).sections, Data.getInstance(this.getInstance(i)).sections).isEmpty()) {
 						finalChoices.add(i);
-						System.out.println("Added " + i + " to shortlist");
+						//System.out.println("Added " + i + " to shortlist");
 						choices.add("Peer " + ID + "&" + peer.ID + "-" + i);
 					}
 				}
@@ -63,11 +62,6 @@ public class Peer {
 			if (Data.torrentInstances.get(i) != null && Data.torrentInstances.get(i).TYPE == type)
 				return i;
 		}		
-		
-		
-		
-		
-
 		System.out.println("Couldn't find instance for type: " + type);
 		return -1;
 	}

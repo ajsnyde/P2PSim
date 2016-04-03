@@ -1,10 +1,12 @@
 package P2PSim;
 
+import java.io.File;
+
 public class Tester {
 	public static void main(String[] args) {	
 		
 		System.out.println("Loading Access File");
-		DataLoader.loadAccess();
+		DataLoader.loadAccess(new File("P2P.accdb"));
 		
 		// Add test types
 		TorrentType t1 = new TorrentType("T1", 512, 16);
@@ -75,7 +77,6 @@ public class Tester {
 		for(Peer b : Data.peers.values()) {
 			b.printFull();
 			b.getPossiblePeers();
-			
 		}
 		System.out.println("Done!");
 		
