@@ -19,6 +19,15 @@ public class Peer {
 	Peer() {
 		ID = ++keyCounter;
 	}
+	
+	Peer(int ID) {
+		if(!Data.peers.keySet().contains(ID))
+			this.ID = ID;
+		else {
+			System.out.println("ERROR! ATTEMPTED TO CREATE IDENTICAL KEYS FOR PEER " + ID +"/nNew key - " + keyCounter+1);
+			this.ID = ++keyCounter;
+		}
+	}
 
 	void tick() {
 		getPossiblePeers();
@@ -29,17 +38,17 @@ public class Peer {
 		ArrayList<String> choices = new ArrayList<String>();
 		while (it.hasNext()) {
 			Peer peer = it.next();
-
 			if (peer.ID != ID && Helper.intersection(peer.connections, connections).isEmpty()) {
 				// checks for identical peer and lack of connections
-				//System.out.println("Comparing peers " + ID + " and " + peer.ID);
+				System.out.println("Comparing peers " + ID + " and " + peer.ID);
+				peer.printFull();
 				List<Integer> torrentChoices = Helper.intersection(peer.torrentTypes,torrentTypes);
 				List<Integer> finalChoices = new ArrayList<Integer>();
-				//System.out.println("Choices before checking sections "+torrentChoices);
+				System.out.println("Choices (Types) before checking sections "+torrentChoices);
 				for(int i: torrentChoices) {
 					if(Helper.intersection(Data.getInstance(peer.getInstance(i)).sections, Data.getInstance(this.getInstance(i)).sections).isEmpty()) {
 						finalChoices.add(i);
-						//System.out.println("Added " + i + " to shortlist");
+						System.out.println("Added " + i + " to shortlist");
 						choices.add("Peer " + ID + "&" + peer.ID + "-" + i);
 					}
 				}
@@ -49,10 +58,17 @@ public class Peer {
 	}
 
 	int getInstance(int type) {
+		
 		for (Integer i : torrents) {
-			if (Data.torrentInstances.get(i).TYPE == type)
+			if (Data.torrentInstances.get(i) != null && Data.torrentInstances.get(i).TYPE == type)
 				return i;
-		}
+		}		
+		
+		
+		
+		
+
+		System.out.println("Couldn't find instance for type: " + type);
 		return -1;
 	}
 
@@ -68,5 +84,12 @@ public class Peer {
 	}
 	public String toString() {
 		return "Peer - ID:"+ID;	
+	}
+	
+	public void printFull() {
+		System.out.println("Peer - ID - " + ID + " In: " + trafficIn + "/" + maxIn
+				+ " Out: " + trafficOut + "/" + maxOut);
+		System.out.println("TorrentTypes: " + torrentTypes);
+		System.out.println("TorrentInstances: " + torrents);
 	}
 }

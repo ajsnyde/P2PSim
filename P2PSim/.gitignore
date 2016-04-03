@@ -6,3 +6,6 @@
 /Tester.class
 /TorrentInstance.class
 /TorrentType.class
+/DataLoader.class
+/DataLoader$KeyTranslator.class
+/KeyTranslator.class

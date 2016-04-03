@@ -3,6 +3,9 @@ package P2PSim;
 public class Tester {
 	public static void main(String[] args) {	
 		
+		System.out.println("Loading Access File");
+		DataLoader.loadAccess();
+		
 		// Add test types
 		TorrentType t1 = new TorrentType("T1", 512, 16);
 		Data.add(t1);
@@ -65,13 +68,15 @@ public class Tester {
 		Data.add(tInstance);
 		peer.add(tInstance);
 		
-		
 		System.out.println(Data.peers.values());
 		System.out.println(Data.torrentTypes.values());
 		System.out.println(Data.torrentInstances.values());
 		
-		for(Peer b : Data.peers.values())
+		for(Peer b : Data.peers.values()) {
+			b.printFull();
 			b.getPossiblePeers();
+			
+		}
 		System.out.println("Done!");
 		
 	}
