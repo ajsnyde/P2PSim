@@ -14,12 +14,12 @@ public class KeyTranslator {
 	}
 	
 	void add(int pre, int post) {
-		if (!preSet.contains(pre)) {
+		if (!preSet.contains(pre) && !postSet.contains(post)) {
 			preSet.add(pre);
-			while (postSet.contains(keyCounter))
-				keyCounter++;// Increment until free - should not need to be done often
-			postSet.add(keyCounter);
+			postSet.add(post);
 		}
+		else
+			System.out.println("ERROR: Identical preProcessed/postProcessed Key!");
 	}
 
 	int preToPost(int pre) {
