@@ -84,7 +84,6 @@ public class P2PGUI {
 			            chooser.getSelectedFile().getName());
 			       DataLoader.loadAccess(chooser.getSelectedFile());
 			    }
-			    
 			}
 		});
 		mnFile.add(mntmImportAccessDb);
@@ -96,6 +95,19 @@ public class P2PGUI {
 			}
 		});
 		mnFile.add(mntmImportDefaultDb);
+		
+		JMenuItem mntmImportWizard = new JMenuItem("Import Wizard...");
+		mntmImportWizard.setEnabled(false);
+		mnFile.add(mntmImportWizard);
+		
+		JMenu mnCreate = new JMenu("Create");
+		menuBar.add(mnCreate);
+		
+		JMenuItem mntmSinglePeer = new JMenuItem("Single Peer");
+		mnCreate.add(mntmSinglePeer);
+		
+		JMenuItem mntmSingleTorrent = new JMenuItem("Single Torrent");
+		mnCreate.add(mntmSingleTorrent);
 		
 		JMenu mnOutput = new JMenu("Output");
 		menuBar.add(mnOutput);
@@ -136,6 +148,14 @@ public class P2PGUI {
 			}
 		});
 		mnOutput.add(mntmPossibleConnectionsconsole);
+		
+		JMenuItem mntmPeerstree = new JMenuItem("Peers (Tree)");
+		mntmPeerstree.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new PeerView();
+			}
+		});
+		mnOutput.add(mntmPeerstree);
 	}
 
 }
