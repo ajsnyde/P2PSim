@@ -23,9 +23,6 @@ public class PeerView extends JFrame {
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -39,9 +36,6 @@ public class PeerView extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public PeerView() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

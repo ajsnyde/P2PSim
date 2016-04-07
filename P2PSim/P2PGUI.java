@@ -1,7 +1,6 @@
 package P2PSim;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -76,13 +75,14 @@ public class P2PGUI {
 			    JFileChooser chooser = new JFileChooser();
 			    FileNameExtensionFilter filter = new FileNameExtensionFilter(
 			        "Access Databases", "accdb");
+			    chooser.setMultiSelectionEnabled(true);
 			    chooser.addChoosableFileFilter(filter);
 			    chooser.setFileFilter(filter);
 			    int returnVal = chooser.showOpenDialog(null);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
-			       System.out.println("You chose to open this file: " +
-			            chooser.getSelectedFile().getName());
+			       File[] files = chooser.getSelectedFiles();
 			       DataLoader.loadAccess(chooser.getSelectedFile());
+			       DataLoader.main(files);
 			    }
 			}
 		});
@@ -91,7 +91,10 @@ public class P2PGUI {
 		JMenuItem mntmImportDefaultDb = new JMenuItem("Import Default DB");
 		mntmImportDefaultDb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DataLoader.loadAccess(new File("P2P.accdb"));
+				File[] in = new File[1];
+				in[0] = new File("P2P.accdb");
+				DataLoader.main(in);
+				// allows for multiple access files to be added at once, while using a new thread - no waiting
 			}
 		});
 		mnFile.add(mntmImportDefaultDb);
@@ -104,6 +107,11 @@ public class P2PGUI {
 		menuBar.add(mnCreate);
 		
 		JMenuItem mntmSinglePeer = new JMenuItem("Single Peer");
+		mntmSinglePeer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new PeerCreator();
+			}
+		});
 		mnCreate.add(mntmSinglePeer);
 		
 		JMenuItem mntmSingleTorrent = new JMenuItem("Single Torrent");
@@ -157,5 +165,4 @@ public class P2PGUI {
 		});
 		mnOutput.add(mntmPeerstree);
 	}
-
 }

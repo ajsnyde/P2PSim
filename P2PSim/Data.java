@@ -14,6 +14,8 @@ public class Data {
 	static int TypeFromInstance(int ID) {
 		return getInstance(ID).TYPE;
 	}
+	
+	// Get by its own ID
 	static TorrentInstance getInstance(int ID) {
 		return torrentInstances.get(ID);
 	}
@@ -23,6 +25,8 @@ public class Data {
 	static Peer getPeer(int ID) {
 		return peers.get(ID);
 	}
+	
+	// Get by TorrentInstance
 	static Peer getPeer(TorrentInstance in) {
 		for(Peer peer : peers.values()) {
 			if(peer.torrents.contains(in.ID))
@@ -30,6 +34,7 @@ public class Data {
 		}
 		return null;
 	}
+	
 	static void add(Peer in) {
 		peers.put(in.ID, in);
 	}
