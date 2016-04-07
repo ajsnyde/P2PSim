@@ -1,5 +1,6 @@
 package P2PSim;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +12,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DataLoader {
 
+	void Dataloader(){
+		
+	}
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				for(String str: args)
+					loadAccess(new File(str));
+			}
+		});
+	}
+	
+	
 	// TEMPORARY ONLY
 	static ConcurrentHashMap<Integer, Peer> peers = new ConcurrentHashMap<Integer, Peer>();
 	static ConcurrentHashMap<Integer, TorrentInstance> torrentInstances = new ConcurrentHashMap<Integer, TorrentInstance>();
@@ -83,8 +98,6 @@ public class DataLoader {
 				peer.torrentTypes.add(instance.TYPE);
 			}
 			System.out.println(instanceKeys);
-			
-			System.out.println(peers.get(0).torrentTypes);
 			
 			System.out.println("No conflicts within added DB: adding to main data...");
 			
