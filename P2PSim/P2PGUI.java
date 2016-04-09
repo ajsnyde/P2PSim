@@ -40,16 +40,8 @@ public class P2PGUI {
 		
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace(); 
-		} catch (UnsupportedLookAndFeelException e1) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -106,16 +98,19 @@ public class P2PGUI {
 		JMenu mnCreate = new JMenu("Create");
 		menuBar.add(mnCreate);
 		
-		JMenuItem mntmSinglePeer = new JMenuItem("Single Peer");
-		mntmSinglePeer.addActionListener(new ActionListener() {
+		JMenuItem mntmPeer = new JMenuItem("Peer/s");
+		mntmPeer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new PeerCreator();
 			}
 		});
-		mnCreate.add(mntmSinglePeer);
+		mnCreate.add(mntmPeer);
 		
 		JMenuItem mntmSingleTorrent = new JMenuItem("Single Torrent");
 		mnCreate.add(mntmSingleTorrent);
+		
+		JMenuItem mntmType = new JMenuItem("Type");
+		mnCreate.add(mntmType);
 		
 		JMenu mnOutput = new JMenu("Output");
 		menuBar.add(mnOutput);

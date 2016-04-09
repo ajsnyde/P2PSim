@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JProgressBar;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.awt.Font;

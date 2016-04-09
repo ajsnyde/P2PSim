@@ -7,6 +7,7 @@ import java.util.List;
 public class Peer {
 	public static int keyCounter = -1;
 	public final int ID;
+	public String name = "Peer";
 	public ArrayList<Integer> torrents = new ArrayList<Integer>();
 	public ArrayList<Integer> torrentTypes = new ArrayList<Integer>();
 	public ArrayList<Integer> connections = new ArrayList<Integer>();
@@ -77,7 +78,7 @@ public class Peer {
 		return false;
 	}
 	public String toString() {
-		return "Peer - ID:"+ID;	
+		return name + " - ID: "+ID;	
 	}
 	
 	public void printFull() {

@@ -49,7 +49,7 @@ public class DataLoader {
 			else if(file.exists())
 				dbCon = DriverManager.getConnection("jdbc:ucanaccess://" + file.getPath());
 			// Columns shown for reference
-			String addPeers = "SELECT ID, maxIn, maxOut, trafficIn, trafficOut FROM Peers";
+			String addPeers = "SELECT ID, maxIn, maxOut, trafficIn, trafficOut, peerName FROM Peers";
 			String addTypes = "SELECT ID, numSections, sectionSize, torrentName FROM TorrentTypes";
 			String addInstances = "SELECT ID, type, peer, complete FROM Torrents";
 			int interval = 333;
@@ -73,6 +73,8 @@ public class DataLoader {
 				peer.maxOut = peerRS.getInt("maxOut");
 				peer.trafficIn = peerRS.getInt("trafficIn");
 				peer.trafficOut = peerRS.getInt("trafficOut");
+				if(peerRS.getString("peerName") != null)
+					peer.name = peerRS.getString("peerName");
 				peers.put(peer.ID, peer);
 			}
 			loader.progressBar.setValue(loader.progressBar.getValue()+interval);
