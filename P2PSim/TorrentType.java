@@ -1,6 +1,6 @@
 package P2PSim;
 
-public class TorrentType {
+public class TorrentType{
 	public static int keyCounter = -1;
 	public final int ID;
 	public final String name;

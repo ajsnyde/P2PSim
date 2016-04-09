@@ -109,26 +109,43 @@ public class PeerCreator extends JFrame {
 		JMenuItem addTypePeerMenu = new JMenuItem("Add Selected Types");
 		JMenuItem renamePeerMenu = new JMenuItem("Rename");
 		JMenuItem modifyPeerMenu = new JMenuItem("Modify");
+		JMenuItem newPeerMenu = new JMenuItem("New Peer");
+		modifyPeerMenu.setEnabled(false);
 		JMenuItem propertiesPeerMenu = new JMenuItem("Properties..");
+		propertiesPeerMenu.setEnabled(false);
 		
 		JPopupMenu peerPopup = new JPopupMenu();
+		peerPopup.add(newPeerMenu);
 		peerPopup.add(removePeerMenu);
 		peerPopup.add(addTypePeerMenu);
 		peerPopup.add(modifyPeerMenu);
 		peerPopup.add(renamePeerMenu);
 		peerPopup.add(propertiesPeerMenu);
+		
 		peerList.setComponentPopupMenu(peerPopup);
 		
 		// INSTANCE MENU
 		
 		JMenuItem removeInstanceMenu = new JMenuItem("Remove");
 		JMenuItem editInstanceMenu = new JMenuItem("Edit");
+		editInstanceMenu.setEnabled(false);
 		
 		JPopupMenu instancePopup = new JPopupMenu();
 		instancePopup.add(removeInstanceMenu);
 		instancePopup.add(editInstanceMenu);
 		instanceList.setComponentPopupMenu(instancePopup);
+		
+		// TYPE MENU
+		
+		JMenuItem removeTypeMenu = new JMenuItem("Remove");
+		JMenuItem createTypeMenu = new JMenuItem("New..");
+		removeTypeMenu.setEnabled(false);
 
+		JPopupMenu typePopup = new JPopupMenu();
+		typePopup.add(removeTypeMenu);
+		typePopup.add(createTypeMenu);
+		typeList.setComponentPopupMenu(typePopup);
+		
 		JLabel lblPeers_1 = new JLabel("Peers");
 		lblPeers_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		scrollPanePeers.setColumnHeaderView(lblPeers_1);
@@ -209,7 +226,6 @@ public class PeerCreator extends JFrame {
 		ActionListener renamePeer = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Peer> renameList = peerList.getSelectedValuesList();
-
 				String name = JOptionPane.showInputDialog("Please input name: ");
 				for (Peer peer : renameList)
 					peer.name = name;
@@ -238,7 +254,6 @@ public class PeerCreator extends JFrame {
 
 		ActionListener addTorrent = new ActionListener() {
 			TorrentInstance out;
-
 			public void actionPerformed(ActionEvent e) {
 				for (Peer peer : peerList.getSelectedValuesList()) {
 					for (TorrentType type : typeList.getSelectedValuesList()) {
@@ -253,11 +268,17 @@ public class PeerCreator extends JFrame {
 			}
 		};
 
+		ActionListener createType = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TypeCreator();
+			}
+		};
+		
 		// Allows right-click to select and create popup menu
 		MouseListener select = new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (SwingUtilities.isRightMouseButton(e) && ((JList) e.getSource()).getSelectedIndices().length < 2) {
-					JList list = (JList) e.getSource();
+				if (SwingUtilities.isRightMouseButton(e) && ((JList<?>) e.getSource()).getSelectedIndices().length < 2) {
+					JList<?> list = (JList<?>) e.getSource();
 					int row = list.locationToIndex(e.getPoint());
 					list.setSelectedIndex(row);
 				}
@@ -272,8 +293,11 @@ public class PeerCreator extends JFrame {
 		removePeerMenu.addActionListener(removePeer);
 		addTypePeerMenu.addActionListener(addTorrent);
 		removeInstanceMenu.addActionListener(removeInstance);
+		newPeerMenu.addActionListener(createPeer);
+		createTypeMenu.addActionListener(createType);
 		peerList.addMouseListener(select);
 		instanceList.addMouseListener(select);
+		typeList.addMouseListener(select);
 
 		peerList.addKeyListener(new KeyAdapter() {
 			@Override

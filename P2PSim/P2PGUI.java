@@ -110,6 +110,11 @@ public class P2PGUI {
 		mnCreate.add(mntmSingleTorrent);
 		
 		JMenuItem mntmType = new JMenuItem("Type");
+		mntmType.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TypeCreator();
+			}
+		});
 		mnCreate.add(mntmType);
 		
 		JMenu mnOutput = new JMenu("Output");

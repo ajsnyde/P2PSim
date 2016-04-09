@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Peer {
+public class Peer{
 	public static int keyCounter = -1;
 	public final int ID;
 	public String name = "Peer";
