@@ -11,25 +11,20 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JList;
 import java.awt.Insets;
-import java.awt.TextField;
-
 import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
-import javax.swing.JCheckBox;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.JEditorPane;
+import java.awt.Color;
 
 public class TypeCreator extends JFrame {
 
@@ -94,6 +89,23 @@ public class TypeCreator extends JFrame {
 		panel.add(lblName, gbc_lblName);
 
 		textField = new JTextField();
+		textField.setForeground(Color.GRAY);
+		textField.addFocusListener(new FocusListener() {
+		    public void focusGained(FocusEvent e) {
+		    	if(textField.getText().equals(placeholder.name)){
+			    	textField.setText("");
+			    	textField.setForeground(Color.BLACK);
+		    	}
+		    	
+		    }
+
+		    public void focusLost(FocusEvent e) {
+		    	if(textField.getText().isEmpty()){
+			    	textField.setText(placeholder.name);
+			    	textField.setForeground(Color.GRAY);
+		    	}
+		    }
+		});
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.insets = new Insets(0, 0, 5, 5);
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;

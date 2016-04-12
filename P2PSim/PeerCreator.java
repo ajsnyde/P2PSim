@@ -56,12 +56,10 @@ public class PeerCreator extends JFrame {
 	}
 
 	public PeerCreator() {
-		
-		/*Index:
-		 * 1. Most Objects + Properties
-		 * 2. ActionListener Creation
-		 * 3. Adding ActionListeners to Objects
-		 * 4. Methods
+
+		/*
+		 * Index: 1. Most Objects + Properties 2. ActionListener Creation 3.
+		 * Adding ActionListeners to Objects 4. Methods
 		 */
 
 		setTitle("Peer Creator");
@@ -104,7 +102,7 @@ public class PeerCreator extends JFrame {
 		scrollPanePeers.setViewportView(peerList);
 
 		// PEER MENU
-		
+
 		JMenuItem removePeerMenu = new JMenuItem("Remove");
 		JMenuItem addTypePeerMenu = new JMenuItem("Add Selected Types");
 		JMenuItem renamePeerMenu = new JMenuItem("Rename");
@@ -113,7 +111,7 @@ public class PeerCreator extends JFrame {
 		modifyPeerMenu.setEnabled(false);
 		JMenuItem propertiesPeerMenu = new JMenuItem("Properties..");
 		propertiesPeerMenu.setEnabled(false);
-		
+
 		JPopupMenu peerPopup = new JPopupMenu();
 		peerPopup.add(newPeerMenu);
 		peerPopup.add(removePeerMenu);
@@ -121,22 +119,22 @@ public class PeerCreator extends JFrame {
 		peerPopup.add(modifyPeerMenu);
 		peerPopup.add(renamePeerMenu);
 		peerPopup.add(propertiesPeerMenu);
-		
+
 		peerList.setComponentPopupMenu(peerPopup);
-		
+
 		// INSTANCE MENU
-		
+
 		JMenuItem removeInstanceMenu = new JMenuItem("Remove");
 		JMenuItem editInstanceMenu = new JMenuItem("Edit");
 		editInstanceMenu.setEnabled(false);
-		
+
 		JPopupMenu instancePopup = new JPopupMenu();
 		instancePopup.add(removeInstanceMenu);
 		instancePopup.add(editInstanceMenu);
 		instanceList.setComponentPopupMenu(instancePopup);
-		
+
 		// TYPE MENU
-		
+
 		JMenuItem removeTypeMenu = new JMenuItem("Remove");
 		JMenuItem createTypeMenu = new JMenuItem("New..");
 		removeTypeMenu.setEnabled(false);
@@ -145,7 +143,7 @@ public class PeerCreator extends JFrame {
 		typePopup.add(removeTypeMenu);
 		typePopup.add(createTypeMenu);
 		typeList.setComponentPopupMenu(typePopup);
-		
+
 		JLabel lblPeers_1 = new JLabel("Peers");
 		lblPeers_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		scrollPanePeers.setColumnHeaderView(lblPeers_1);
@@ -232,20 +230,24 @@ public class PeerCreator extends JFrame {
 				updatePeers();
 			}
 		};
-		
+
 		ActionListener removeInstance = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<TorrentInstance> instances = (List<TorrentInstance>)instanceList.getSelectedValuesList();
+				List<TorrentInstance> instances = (List<TorrentInstance>) instanceList.getSelectedValuesList();
 				instanceList.setSelectedIndex(-1);
-				
-				for(TorrentInstance instance: instances) {
+
+				for (TorrentInstance instance : instances) {
 					peerModel.removeElement(instance);
-					Data.getPeer(instance).torrents.remove((Integer)instance.ID);	// remove instance from its peer
-					
-					// something on this line kills the program, related to toString for Instance
-					//Data.getPeer(instance).torrentTypes.remove((Integer)instance.TYPE);
-					
-					
+					Data.getPeer(instance).torrents.remove((Integer) instance.ID); // remove
+																					// instance
+																					// from
+																					// its
+																					// peer
+
+					// something on this line kills the program, related to
+					// toString for Instance
+					// Data.getPeer(instance).torrentTypes.remove((Integer)instance.TYPE);
+
 					Data.torrentInstances.remove(instance.ID);
 				}
 				updateInstances();
@@ -254,6 +256,7 @@ public class PeerCreator extends JFrame {
 
 		ActionListener addTorrent = new ActionListener() {
 			TorrentInstance out;
+
 			public void actionPerformed(ActionEvent e) {
 				for (Peer peer : peerList.getSelectedValuesList()) {
 					for (TorrentType type : typeList.getSelectedValuesList()) {
@@ -273,7 +276,7 @@ public class PeerCreator extends JFrame {
 				new TypeCreator();
 			}
 		};
-		
+
 		// Allows right-click to select and create popup menu
 		MouseListener select = new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -299,13 +302,20 @@ public class PeerCreator extends JFrame {
 		instanceList.addMouseListener(select);
 		typeList.addMouseListener(select);
 
-		peerList.addKeyListener(new KeyAdapter() {
+		KeyAdapter deleteKey = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				if (arg0.getKeyCode() == KeyEvent.VK_DELETE)
-					removePeer.actionPerformed(null);
+				if (arg0.getKeyCode() == KeyEvent.VK_DELETE){
+					if (arg0.getSource() == peerList)
+						removePeer.actionPerformed(null);
+					if (arg0.getSource() == instanceList)
+						removeInstance.actionPerformed(null);	
+				}
 			}
-		});
+		};
+		
+		peerList.addKeyListener(deleteKey);
+		instanceList.addKeyListener(deleteKey);
 
 		updateAll();
 		setVisible(true);
