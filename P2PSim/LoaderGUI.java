@@ -11,12 +11,13 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class LoaderGUI extends JFrame {
+public class LoaderGUI extends JDialog {
 
 	private JPanel contentPane;
 	public JProgressBar progressBar;
@@ -38,7 +39,6 @@ public class LoaderGUI extends JFrame {
 	}
 
 	public LoaderGUI() {
-
 		setTitle("Loading Progress");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 411, 438);

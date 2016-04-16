@@ -2,6 +2,7 @@ package P2PSim;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Dialog.ModalityType;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +23,13 @@ public class DataLoader {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				numImports = args.length;
+				// Prevent playing with other windows while loading... It works, but doesn't prevent clicks.
+				// i.e. - while the concurrent actions are prevented, a clicked button will click itself after loading.
+				// This is funny because other JDialogs I've used modally have had other windows flashed on attempts to focus
+				loader.setModal(true);
+				loader.setAlwaysOnTop(true);
+				loader.setModalityType (ModalityType.APPLICATION_MODAL);
+				 
 				loader.setVisible(true);
 				loader.addMsg("Starting Imports...");
 				loader.progressBar.setValue(1);
@@ -29,6 +37,7 @@ public class DataLoader {
 					loadAccess(args[i]);
 					loader.setTitle("Loading Progress - " + i + "/" + args.length + " Complete");
 				}
+
 				loader.setTitle("Loading Progress - " + args.length + "/" + args.length + " Complete");
 			}
 		});
@@ -122,6 +131,9 @@ public class DataLoader {
 			Data.torrentInstances = torrentInstances;
 			Data.torrentTypes = torrentTypes;
 			dbCon.close();
+			loader.addMsg("Data import complete. Updating open windows to reflect changes in data...");
+			P2PGUI.updateAllLists();
+			loader.addMsg("All operations complete - Proceed to close window");
 			loader.btnCancel.setText("Close");
 			
 		} catch (SQLException e) {

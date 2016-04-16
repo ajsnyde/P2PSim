@@ -1,6 +1,7 @@
 package P2PSim;
 
 import java.awt.BorderLayout;
+import java.awt.Dialog.ModalityType;
 import java.awt.EventQueue;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.Font;
@@ -102,7 +104,6 @@ public class PeerCreator extends JFrame {
 		scrollPanePeers.setViewportView(peerList);
 
 		// PEER MENU
-
 		JMenuItem removePeerMenu = new JMenuItem("Remove");
 		JMenuItem addTypePeerMenu = new JMenuItem("Add Selected Types");
 		JMenuItem renamePeerMenu = new JMenuItem("Rename");
@@ -111,7 +112,6 @@ public class PeerCreator extends JFrame {
 		JMenuItem possibleConnectionsPeerMenu = new JMenuItem("Possible Connections..");
 		modifyPeerMenu.setEnabled(false);
 		JMenuItem propertiesPeerMenu = new JMenuItem("Properties..");
-		propertiesPeerMenu.setEnabled(false);
 
 		JPopupMenu peerPopup = new JPopupMenu();
 		peerPopup.add(newPeerMenu);
@@ -125,7 +125,6 @@ public class PeerCreator extends JFrame {
 		peerList.setComponentPopupMenu(peerPopup);
 
 		// INSTANCE MENU
-
 		JMenuItem removeInstanceMenu = new JMenuItem("Remove");
 		JMenuItem editInstanceMenu = new JMenuItem("Edit");
 		editInstanceMenu.setEnabled(false);
@@ -136,7 +135,6 @@ public class PeerCreator extends JFrame {
 		instanceList.setComponentPopupMenu(instancePopup);
 
 		// TYPE MENU
-
 		JMenuItem removeTypeMenu = new JMenuItem("Remove");
 		JMenuItem createTypeMenu = new JMenuItem("New..");
 		removeTypeMenu.setEnabled(false);
@@ -234,14 +232,29 @@ public class PeerCreator extends JFrame {
 				P2PGUI.updateAllLists();
 			}
 		};
-		
+
 		ActionListener getPossibleConnectionsPeer = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Peer> list = peerList.getSelectedValuesList();
 				String output = "";
 				for (Peer peer : list)
-					output += peer.getPossiblePeers();
-				JOptionPane.showInternalMessageDialog(contentPane, output, "Connections for Peers", JOptionPane.PLAIN_MESSAGE);
+					output += "Peer " + peer.ID + " - " + peer.getPossiblePeers() + "\n";
+				// Will eventually replace with custom modal JDialog - The JOptionPane can be unwieldy, but is quick/effective
+				JOptionPane.showMessageDialog(contentPane, output, "Potential Connections for Peers",
+						JOptionPane.PLAIN_MESSAGE);
+			}
+		};
+		
+		ActionListener propertiesPeer = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Peer peer = peerList.getSelectedValue();
+				if(peer != null) {
+					PeerProperties dialog = new PeerProperties(peer);
+					dialog.setModal(true);
+					dialog.setAlwaysOnTop (true);
+					dialog.setModalityType (ModalityType.APPLICATION_MODAL);
+					dialog.setVisible(true);
+				}
 			}
 		};
 
@@ -252,16 +265,7 @@ public class PeerCreator extends JFrame {
 
 				for (TorrentInstance instance : instances) {
 					peerModel.removeElement(instance);
-					Data.getPeer(instance).torrents.remove((Integer) instance.ID); // remove
-																					// instance
-																					// from
-																					// its
-																					// peer
-
-					// something on this line kills the program, related to
-					// toString for Instance
-					// Data.getPeer(instance).torrentTypes.remove((Integer)instance.TYPE);
-
+					Data.getPeer(instance).torrents.remove((Integer) instance.ID);
 					Data.torrentInstances.remove(instance.ID);
 				}
 				updateInstances();
@@ -296,7 +300,8 @@ public class PeerCreator extends JFrame {
 		// Allows right-click to select and create popup menu
 		MouseListener select = new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (SwingUtilities.isRightMouseButton(e) && ((JList<?>) e.getSource()).getSelectedIndices().length < 2) {
+				if (SwingUtilities.isRightMouseButton(e)
+						&& ((JList<?>) e.getSource()).getSelectedIndices().length < 2) {
 					JList<?> list = (JList<?>) e.getSource();
 					int row = list.locationToIndex(e.getPoint());
 					list.setSelectedIndex(row);
@@ -310,6 +315,7 @@ public class PeerCreator extends JFrame {
 		btnAddSelectedTorrent.addActionListener(addTorrent);
 		renamePeerMenu.addActionListener(renamePeer);
 		possibleConnectionsPeerMenu.addActionListener(getPossibleConnectionsPeer);
+		propertiesPeerMenu.addActionListener(propertiesPeer);
 		removePeerMenu.addActionListener(removePeer);
 		addTypePeerMenu.addActionListener(addTorrent);
 		removeInstanceMenu.addActionListener(removeInstance);
@@ -322,15 +328,15 @@ public class PeerCreator extends JFrame {
 		KeyAdapter deleteKey = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				if (arg0.getKeyCode() == KeyEvent.VK_DELETE){
+				if (arg0.getKeyCode() == KeyEvent.VK_DELETE) {
 					if (arg0.getSource() == peerList)
 						removePeer.actionPerformed(null);
 					if (arg0.getSource() == instanceList)
-						removeInstance.actionPerformed(null);	
+						removeInstance.actionPerformed(null);
 				}
 			}
 		};
-		
+
 		peerList.addKeyListener(deleteKey);
 		instanceList.addKeyListener(deleteKey);
 

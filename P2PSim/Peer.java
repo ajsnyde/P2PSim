@@ -34,9 +34,9 @@ public class Peer{
 		getPossiblePeers();
 	}
 
-	String getPossiblePeers() {	// checks each peer, then each type.. Rules out impossible connections
+	ArrayList<Peer> getPossiblePeers() {	// checks each peer, then each type.. Rules out impossible connections
 		Iterator<Peer> it = Data.peers.values().iterator();
-		ArrayList<String> choices = new ArrayList<String>();
+		ArrayList<Peer> choices = new ArrayList<Peer>();
 		while (it.hasNext()) {
 			Peer peer = it.next();
 			if (peer.ID != ID && Helper.intersection(peer.connections, connections).isEmpty()) {
@@ -49,13 +49,13 @@ public class Peer{
 					if(Helper.intersection(Data.getInstance(peer.getInstance(i)).sections, Data.getInstance(this.getInstance(i)).sections).isEmpty()) {
 						finalChoices.add(i);
 						//System.out.println("Added " + i + " to shortlist");
-						choices.add("Peer " + ID + "&" + peer.ID + "-" + i);
+						choices.add(peer);
 					}
 				}
 			}
 		}
 		System.out.println("FINAL PEER CHOICES FOR PEER " + ID + ": \n" + choices);
-		return ID + ":\n" + choices;
+		return choices;
 	}
 
 	int getInstance(int type) {

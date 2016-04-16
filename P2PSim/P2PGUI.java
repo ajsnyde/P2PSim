@@ -78,6 +78,7 @@ public class P2PGUI {
 			       File[] files = chooser.getSelectedFiles();
 			       DataLoader.loadAccess(chooser.getSelectedFile());
 			       DataLoader.main(files);
+			       updateAllLists();
 			    }
 			}
 		});
@@ -98,19 +99,36 @@ public class P2PGUI {
 		mntmImportWizard.setEnabled(false);
 		mnFile.add(mntmImportWizard);
 		
+		JMenu mnEdit = new JMenu("Edit");
+		menuBar.add(mnEdit);
+		
+		
+		// Aside from making sure there aren't any memory leaks, this 
+		// isn't necessarily safe concurrently with other windows open.
+		JMenuItem mntmClearAll = new JMenuItem("Clear All (Unsafe)");
+		mntmClearAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Data.peers.clear();
+				Peer.keyCounter = -1;
+				Data.torrentInstances.clear();
+				TorrentInstance.keyCounter = -1;
+				Data.torrentTypes.clear();
+				TorrentType.keyCounter = -1;
+				updateAllLists();
+			}
+		});
+		mnEdit.add(mntmClearAll);
+		
 		JMenu mnCreate = new JMenu("Create");
 		menuBar.add(mnCreate);
 		
-		JMenuItem mntmPeer = new JMenuItem("Peer/s");
+		JMenuItem mntmPeer = new JMenuItem("Peer Editor..");
 		mntmPeer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new PeerCreator();
 			}
 		});
 		mnCreate.add(mntmPeer);
-		
-		JMenuItem mntmSingleTorrent = new JMenuItem("Single Torrent");
-		mnCreate.add(mntmSingleTorrent);
 		
 		JMenuItem mntmType = new JMenuItem("Type");
 		mntmType.addActionListener(new ActionListener() {
