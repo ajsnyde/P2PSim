@@ -22,6 +22,8 @@ import java.awt.ScrollPane;
 public class PeerView extends JFrame {
 
 	private JPanel contentPane;
+	JTree tree = new JTree();
+	DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -53,25 +55,12 @@ public class PeerView extends JFrame {
 			e1.printStackTrace();
 		}
 
-
-		JTree tree = new JTree();
 		tree.setEditable(true);
 		tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Peers") {
 			{
 			}
 		}));
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
-
-		for (Peer peer : Data.peers.values()) {
-			model.insertNodeInto(new DefaultMutableTreeNode(peer.toString()), (MutableTreeNode) model.getRoot(), 0);
-			model.insertNodeInto(new DefaultMutableTreeNode("Torrent Instances"), (MutableTreeNode) model.getChild(model.getRoot(), 0), 0);
-			for (TorrentInstance instance : Data.torrentInstances.values()) {
-				if(peer.torrents.contains(instance.ID))
-					model.insertNodeInto(new DefaultMutableTreeNode(instance), (MutableTreeNode) model.getChild(model.getChild(model.getRoot(), 0), 0), 0);
-			}
-		}
-		
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -84,7 +73,17 @@ public class PeerView extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		scrollPane.add(tree, ScrollPane.CENTER_ALIGNMENT);
 		
+		updatePeers();
 		setVisible(true);
 	}
-
+	public void updatePeers(){
+		for (Peer peer : Data.peers.values()) {
+			model.insertNodeInto(new DefaultMutableTreeNode(peer.toString()), (MutableTreeNode) model.getRoot(), 0);
+			model.insertNodeInto(new DefaultMutableTreeNode("Torrent Instances"), (MutableTreeNode) model.getChild(model.getRoot(), 0), 0);
+			for (TorrentInstance instance : Data.torrentInstances.values()) {
+				if(peer.torrents.contains(instance.ID))
+					model.insertNodeInto(new DefaultMutableTreeNode(instance), (MutableTreeNode) model.getChild(model.getChild(model.getRoot(), 0), 0), 0);
+			}
+		}
+	}
 }

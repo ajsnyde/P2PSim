@@ -16,11 +16,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.Font;
+import java.awt.Frame;
+
 import javax.swing.JTextField;
 import javax.swing.JSpinner;
 import javax.swing.JEditorPane;
@@ -187,6 +191,7 @@ public class TypeCreator extends JFrame {
 						((int) spinner_1.getValue() / (int) spinner.getValue()));
 				Data.add(type);
 				typeModel.addElement(type);
+				P2PGUI.updateAllLists();
 			}
 		});
 

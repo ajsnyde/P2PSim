@@ -34,7 +34,7 @@ public class Peer{
 		getPossiblePeers();
 	}
 
-	void getPossiblePeers() {	// checks each peer, then each type.. Rules out impossible connections
+	String getPossiblePeers() {	// checks each peer, then each type.. Rules out impossible connections
 		Iterator<Peer> it = Data.peers.values().iterator();
 		ArrayList<String> choices = new ArrayList<String>();
 		while (it.hasNext()) {
@@ -55,6 +55,7 @@ public class Peer{
 			}
 		}
 		System.out.println("FINAL PEER CHOICES FOR PEER " + ID + ": \n" + choices);
+		return ID + ":\n" + choices;
 	}
 
 	int getInstance(int type) {

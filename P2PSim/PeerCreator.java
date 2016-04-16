@@ -108,6 +108,7 @@ public class PeerCreator extends JFrame {
 		JMenuItem renamePeerMenu = new JMenuItem("Rename");
 		JMenuItem modifyPeerMenu = new JMenuItem("Modify");
 		JMenuItem newPeerMenu = new JMenuItem("New Peer");
+		JMenuItem possibleConnectionsPeerMenu = new JMenuItem("Possible Connections..");
 		modifyPeerMenu.setEnabled(false);
 		JMenuItem propertiesPeerMenu = new JMenuItem("Properties..");
 		propertiesPeerMenu.setEnabled(false);
@@ -118,6 +119,7 @@ public class PeerCreator extends JFrame {
 		peerPopup.add(addTypePeerMenu);
 		peerPopup.add(modifyPeerMenu);
 		peerPopup.add(renamePeerMenu);
+		peerPopup.add(possibleConnectionsPeerMenu);
 		peerPopup.add(propertiesPeerMenu);
 
 		peerList.setComponentPopupMenu(peerPopup);
@@ -200,7 +202,7 @@ public class PeerCreator extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Peer peer = new Peer();
 				Data.peers.put(peer.ID, peer);
-				peerModel.addElement(peer);
+				P2PGUI.updateAllLists();
 			}
 		};
 
@@ -218,6 +220,7 @@ public class PeerCreator extends JFrame {
 					peerModel.removeElement(kill);
 				}
 				updateInstances();
+				P2PGUI.updateAllLists();
 			}
 		};
 
@@ -228,6 +231,17 @@ public class PeerCreator extends JFrame {
 				for (Peer peer : renameList)
 					peer.name = name;
 				updatePeers();
+				P2PGUI.updateAllLists();
+			}
+		};
+		
+		ActionListener getPossibleConnectionsPeer = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Peer> list = peerList.getSelectedValuesList();
+				String output = "";
+				for (Peer peer : list)
+					output += peer.getPossiblePeers();
+				JOptionPane.showInternalMessageDialog(contentPane, output, "Connections for Peers", JOptionPane.PLAIN_MESSAGE);
 			}
 		};
 
@@ -251,6 +265,7 @@ public class PeerCreator extends JFrame {
 					Data.torrentInstances.remove(instance.ID);
 				}
 				updateInstances();
+				P2PGUI.updateAllLists();
 			}
 		};
 
@@ -264,6 +279,7 @@ public class PeerCreator extends JFrame {
 							out = new TorrentInstance(type, chckbxTorrentComplete.isSelected());
 							Data.add(out);
 							peer.add(out);
+							P2PGUI.updateAllLists();
 						}
 					}
 				}
@@ -293,6 +309,7 @@ public class PeerCreator extends JFrame {
 		btnDeletePeer.addActionListener(removePeer);
 		btnAddSelectedTorrent.addActionListener(addTorrent);
 		renamePeerMenu.addActionListener(renamePeer);
+		possibleConnectionsPeerMenu.addActionListener(getPossibleConnectionsPeer);
 		removePeerMenu.addActionListener(removePeer);
 		addTypePeerMenu.addActionListener(addTorrent);
 		removeInstanceMenu.addActionListener(removeInstance);

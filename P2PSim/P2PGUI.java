@@ -1,6 +1,7 @@
 package P2PSim;
 
 import java.awt.EventQueue;
+import java.awt.Frame;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -13,6 +14,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class P2PGUI {
@@ -164,5 +167,25 @@ public class P2PGUI {
 			}
 		});
 		mnOutput.add(mntmPeerstree);
+	}
+	
+	public static void updateAllLists() {
+		
+		/*
+		 * "Anytime you find yourself writing code of the form "if the object is of type T1, 
+		 * then do something, but if it's of type T2, then do something else," slap yourself.
+		 */
+		
+		List<Frame> f = Arrays.asList(JFrame.getFrames());
+		//Filter down to PeerCreators from Frames
+		
+		for(Frame frame: f) {
+			if(frame instanceof PeerCreator)
+				((PeerCreator) frame).updateAll();
+			else if(frame instanceof TypeCreator)
+				((TypeCreator) frame).updateTypes();
+			else if(frame instanceof PeerView)
+				((PeerView) frame).updatePeers();
+		}
 	}
 }
